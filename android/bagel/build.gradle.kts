@@ -5,11 +5,15 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.github.prem-p-simform"
-
 android {
     namespace = "com.simform.bagel"
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -33,6 +37,48 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.simform"
+                artifactId = "bagel"
+                version = "1.0.0"
+
+                pom {
+                    packaging = "aar"
+                    name.set("Bagel")
+                    description.set("Bagel is a little native iOS/Android network debugger")
+                    url.set("https://github.com/mobile-simformsolutions/Bagel.git")
+                    inceptionYear.set("2024")
+
+                    licenses {
+                        license {
+                            name.set("Apache License Version 2.0, January 2004")
+                            url.set("https://github.com/mobile-simformsolutions/Bagel?tab=License-1-ov-file")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("simform")
+                            name.set("Simform")
+                            email.set("developer@simform.com")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git@github.com:mobile-simformsolutions/Bagel")
+                        developerConnection.set("scm:git@github.com:mobile-simformsolutions/Bagel.git")
+                        url.set("https://github.com/mobile-simformsolutions/Bagel.git")
+                    }
+                }
+            }
+        }
     }
 }
 

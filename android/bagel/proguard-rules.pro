@@ -1,21 +1,40 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# keep everything in this package from being removed or renamed
+-keep class androidx.** { *; }
+# keep everything in this package from being renamed only
+-keepnames class androidx.** { *; }
+# PubNub
+-dontwarn com.pubnub.**
+-keep class com.pubnub.** { *; }
+# Gson
+-dontwarn sun.misc.**
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+# OkHttp3
+-dontwarn okhttp3.**
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+# Okio
+-dontwarn okio.**
+# Retrofit 2.X
+-dontwarn retrofit2.**
+-dontwarn javax.annotation.**
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep all members in enums
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+# Keep the names of classes and methods that are used in the RetrofitFactory class through reflection
+-keepclassmembers class * {
+    *;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-printconfiguration
