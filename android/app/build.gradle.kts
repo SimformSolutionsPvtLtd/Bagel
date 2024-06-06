@@ -26,7 +26,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -46,6 +46,9 @@ android {
 }
 
 dependencies {
+    // Uncomment this line to check locally published version
+//    implementation("com.simform:bagel:1.0.0")
+    // Comment this line to check locally published version
     implementation(project(":bagel"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
