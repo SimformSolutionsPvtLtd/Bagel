@@ -1,22 +1,63 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
-    id("maven-publish")
+    alias(libs.plugins.vanniktechMavenPublish)
+}
+
+mavenPublishing {
+    coordinates("com.simform", "bagel", "1.0.0")
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
+    configure(AndroidSingleVariantLibrary())
+
+    pom {
+        packaging = "aar"
+        name.set("Bagel")
+        description.set("Bagel is a little native iOS/Android network debugger")
+        url.set("https://github.com/mobile-simformsolutions/Bagel.git")
+        inceptionYear.set("2024")
+
+        licenses {
+            license {
+                name.set("Apache License Version 2.0, January 2004")
+                url.set("https://github.com/mobile-simformsolutions/Bagel?tab=License-1-ov-file")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("simform")
+                name.set("Simform")
+                email.set("developer@simform.com")
+            }
+        }
+
+        scm {
+            connection.set("scm:git@github.com:mobile-simformsolutions/Bagel")
+            developerConnection.set("scm:git@github.com:mobile-simformsolutions/Bagel.git")
+            url.set("https://github.com/mobile-simformsolutions/Bagel.git")
+        }
+    }
+
+    signAllPublications()
 }
 
 android {
     namespace = "com.simform.bagel"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
-
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
+        compileSdk = libs.versions.compileSdk.get().toInt()
+
+        aarMetadata {
+            minCompileSdk = libs.versions.minSdk.get().toInt()
+        }
+
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -37,48 +78,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-                groupId = "com.simform"
-                artifactId = "bagel"
-                version = "1.0.0"
-
-                pom {
-                    packaging = "aar"
-                    name.set("Bagel")
-                    description.set("Bagel is a little native iOS/Android network debugger")
-                    url.set("https://github.com/mobile-simformsolutions/Bagel.git")
-                    inceptionYear.set("2024")
-
-                    licenses {
-                        license {
-                            name.set("Apache License Version 2.0, January 2004")
-                            url.set("https://github.com/mobile-simformsolutions/Bagel?tab=License-1-ov-file")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("simform")
-                            name.set("Simform")
-                            email.set("developer@simform.com")
-                        }
-                    }
-
-                    scm {
-                        connection.set("scm:git@github.com:mobile-simformsolutions/Bagel")
-                        developerConnection.set("scm:git@github.com:mobile-simformsolutions/Bagel.git")
-                        url.set("https://github.com/mobile-simformsolutions/Bagel.git")
-                    }
-                }
-            }
-        }
     }
 }
 
