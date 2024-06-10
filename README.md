@@ -75,39 +75,53 @@ Bagel.start(bagelConfig)
 ## Install Android client
 #### Dependency
 * Add the below dependency in your preferred build system
-  * `com.simformsolutions:bagel:1.0`
+    ```groovy 
+    implementation 'com.simform:bagel:1.0.0'
+    ```
 
 ### Usage
 In order to start Bagel we need to start the client and add a interceptor to intercept [OkHttp](https://square.github.io/okhttp/) API calls.
 
-* You can start client in anyway you like from below
-  * Start client when `Application` class starts
+* You can start client in any one of the way you like from below
+  1. Start client when `Application` class starts
+        ```kotlin
+        class App : Application() {
+            override fun onCreate() {
+                super.onCreate()
+                if (BuildConfig.DEBUG) { // Only expose in debug
+                    Bagel.start(context)
+                }
+            }
+        }
+        ```
+  2. Start client using [AppStartup](https://developer.android.com/topic/libraries/app-startup)
+        ```kotlin
+        class BagelInitializer : Initializer<Unit> {
+            override fun create(context: Context) {
+                if (BuildConfig.DEBUG) { // Only expose in debug
+                    Bagel.start(context)
+                }
+            }
 
-```kotlin
-class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        Bagel.start(this)
-    }
-}
-```
-  * Start client using [AppStartup](https://developer.android.com/topic/libraries/app-startup)
+            override fun dependencies(): MutableList<Class<out Initializer<*>>> =
+                mutableListOf()
+        }
+        ```
 
-```kotlin
-class BagelInitializer : Initializer<Unit> {
-    override fun create(context: Context) {
-        Bagel.start(context)
-    }
-
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> =
-        mutableListOf()
-}
-```
-
-* Intercept API calls in [OkHttp](https://square.github.io/okhttp/)
+* Add [OkHttp](https://square.github.io/okhttp/) interceptor (**This is required to route API call details**)
   * While building your `OkHttp` client create interceptor instance as below
-    * `BagelInterceptor.getInstance()`
-
+    ```kotlin
+    OkHttpClient.Builder()
+        .apply {
+            if (BuildConfig.DEBUG) { // Only expose in debug
+                val bagelInterceptor = BagelInterceptor.getInstance()
+                addInterceptor(bagelInterceptor)
+            }
+        }
+        . // Add all other interceptor and configurations
+        .build()
+    ```
+    
 ###  Configuring Bagel
 By default, Bagel gets your project name and device information. Desktop client uses these informations to separate projects and devices. You can configure `projectName` and `netServiceType` if you wish:
 
