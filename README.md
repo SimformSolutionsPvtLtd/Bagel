@@ -76,7 +76,7 @@ Bagel.start(bagelConfig)
 #### Dependency
 * Add the below dependency in your preferred build system
     ```groovy 
-    implementation 'com.simform:bagel:1.0.0'
+    implementation 'com.simform:bagel:1.0.1'
     ```
 
 ### Usage

@@ -9,6 +9,7 @@ data class BagelConfiguration(
     companion object {
         private const val SERVICE_TYPE = "_Bagel._tcp"
 
+        @JvmStatic
         fun getDefault(context: Context): BagelConfiguration = BagelConfiguration(
             projectName = context.packageManager.getApplicationLabel(context.applicationInfo).toString()
         )

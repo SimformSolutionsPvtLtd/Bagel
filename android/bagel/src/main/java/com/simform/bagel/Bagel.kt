@@ -14,6 +14,8 @@ object Bagel {
 
     private val mainScope = MainScope()
 
+    @JvmStatic
+    @JvmOverloads
     fun start(
         context: Context,
         bagelConfiguration: BagelConfiguration = BagelConfiguration.getDefault(context)

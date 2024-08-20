@@ -53,6 +53,7 @@ class BagelInterceptor private constructor() : Interceptor {
         @Volatile
         private var INSTANCE: BagelInterceptor? = null
 
+        @JvmStatic
         @Synchronized
         fun getInstance(): BagelInterceptor =
             INSTANCE ?: let {

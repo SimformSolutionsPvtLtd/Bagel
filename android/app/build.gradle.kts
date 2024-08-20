@@ -47,7 +47,7 @@ android {
 
 dependencies {
     // Uncomment this line to check locally published version
-//    implementation("com.simform:bagel:1.0.0")
+//    implementation("com.simform:bagel:1.0.1")
     // Comment this line to check locally published version
     implementation(project(":bagel"))
     implementation(libs.androidx.core.ktx)
